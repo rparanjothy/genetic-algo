@@ -1,6 +1,7 @@
 var label = "";
-var target = "72843";
+var target = "91426474119142647411";
 var rndm = "";
+
 
 var population = [];
 var populationSize = 10;
@@ -96,11 +97,7 @@ const gatherBest = x => {
   return closeToMax;
 };
 
-function setup() {
-  createCanvas(windowWidth - 50, windowHeight - 20);
-  createPopulation(populationSize);
-  gen=0
-}
+
 
 const getCurrentFittest = (x) => {
     currentMaxFit=max(x.map(e=>e.fitness))
@@ -112,12 +109,45 @@ const getCurrentFittest = (x) => {
     
     return currentMostFittest
 };
+function displayInfo() {
+  let answer = currentMostFittest.guess;
+  ht="<div class=phrase>Best phrase:<br>" + answer+"<div>"
+  // bestPhrase.html("Best phrase:<br>" + answer);
+  bestPhrase.html(ht);
+
+  let statstext = "Total generations:     " + gen + "<br>";
+  statstext += "Total population:      " + populationSize + "<br>";
+
+  stats.html("<div class=stats>"+ statstext+"</div>");
+
+  allPhrases.html("<div> All phrases:<br>" + population.reduce((o,e)=>o+"<br>"+e)+"</div>"
+  )}
+
+
+  function setup() {
+    // createCanvas(windowWidth - 50, windowHeight - 20);
+    ToFind = createP("<div>Target: "+target+"</div>");
+    bestPhrase = createP("Best phrase: ");
+    //bestPhrase.position(10,10);
+    bestPhrase.class("best");
+  
+    allPhrases = createP("All phrases:");
+    // allPhrases.position(300, 10);
+    allPhrases.class("all");
+  
+    stats = createP("Stats");
+    // stats.position(10,200);
+    stats.class("stats");
+  
+    createPopulation(populationSize);
+    gen=0
+  }
 
 function draw() {
   // console.log(gen);
   background(187);
-  textSize(20);
-  text("Target: "+target, width / 2, (height - 150) / 2);
+  // textSize(20);
+  // text("Target: "+target, width / 2, (height - 150) / 2);
   
   //calculate fitness for random guesses
   populationFitness = calculateFitness(population);
@@ -130,8 +160,8 @@ function draw() {
   
   console.log(currentMostFittest)
 
-  text(currentMostFittest.guess, width / 2, (height - 50) / 2);
-  text("Generation: "+gen, width / 2, (height - 100) / 2);
+  // text(currentMostFittest.guess, width / 2, (height - 50) / 2);
+  // text("Generation: "+gen, width / 2, (height - 100) / 2);
   
   if (currentMostFittest.fitness===perfectFit){
     //this is our guy
@@ -146,6 +176,9 @@ function draw() {
 
   temp = nextGeneration(popProb);
   population = temp;
+
+  displayInfo()
+
   
   // noLoop()
 }
