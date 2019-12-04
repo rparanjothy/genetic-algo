@@ -1,10 +1,9 @@
 var label = "";
-var target = "7284";
+var target = "72843";
 var rndm = "";
 
 var population = [];
-var populationSize = 100;
-var popBest = [];
+var populationSize = 10;
 var gen = 0;
 const perfectFit = 1;
 
@@ -21,7 +20,7 @@ const calculateFitness = x => {
   // console.log(x.length);
   return x.map(e => {
     rndm = e;
-    console.log("processing", rndm);
+    // console.log("processing", rndm);
 
     return { guess: e, fitness: fitness(e, target) };
   });
@@ -42,16 +41,13 @@ const fitness = (v, t) => {
     score += v[idx] === t[idx] ? 1 : 0;
   }
   scorex = score / t.length;
-  if (scorex === perfectFit) {
-    noLoop();
-  }
-
   return scorex;
 };
 
 const createPopulation = ct => {
   for (let i = 0; i < ct; i++) {
-    rndm = generateRandomGuess(4);
+    rndm = generateRandomGuess(target.length);
+    console.log(rndm)
     population.push(rndm);
     // sss;
   }
@@ -60,21 +56,23 @@ const createPopulation = ct => {
 const nextGeneration = x => {
   // pick a
   gen += 1;
-  _ = [];
   best = gatherBest(x);
 
   const pickAndMutate = x => {
     a = pickOne(x);
     b = pickOne(x);
-    console.log(a, b);
-    dna = [a.guess.substr(0, 2), b.guess.substr(2)].join("");
+    // console.log(a, b);
+    mi=3
+    // console.log(a.guess,b.guess,mi,a.guess.substr(0, mi),b.guess.substr(mi))
+    dna = [a.guess.substr(0, mi), b.guess.substr(mi)].join("");
+    // console.log('dna',dna)
     // change one chr at a random position
-    idx = floor(random(dna.length - 1));
+    idx = floor(random(dna.length));
     x = Array.from(dna);
-    console.log(idx, x);
+    // console.log(idx, x);
     x[idx] = generateRandomGuess(1);
     mutated = x.join("");
-    console.log(mutated);
+    // console.log(mutated);
     // ss;
     return mutated;
   };
@@ -91,30 +89,56 @@ const pickOne = x => {
 
 const gatherBest = x => {
   mx = max(x.map(e => e.prob));
-  console.log(mx);
+  // console.log(mx);
   closeToMax = x.filter(e => mx - e.prob <= 0.001);
   // take one from closeToMax
-  console.log(closeToMax);
+  // console.log(closeToMax);
   return closeToMax;
 };
 
 function setup() {
   createCanvas(windowWidth - 50, windowHeight - 20);
   createPopulation(populationSize);
+  gen=0
 }
 
-const areWeDone = () => {};
+const getCurrentFittest = (x) => {
+    currentMaxFit=max(x.map(e=>e.fitness))
+
+    currentMostFittest=x.filter((e)=>e.fitness===currentMaxFit)[0]
+    // currentMostFittest=x.filter((e)=>e.fitness===currentMaxFit)
+    
+    console.log(currentMostFittest)
+    
+    return currentMostFittest
+};
 
 function draw() {
-  console.log(gen);
+  // console.log(gen);
   background(187);
   textSize(20);
-  text(target, width / 2, (height - 50) / 2);
-  text(rndm, width / 2, height / 2);
-  //  see if we have our guy in population
-
+  text("Target: "+target, width / 2, (height - 150) / 2);
+  
   //calculate fitness for random guesses
   populationFitness = calculateFitness(population);
+
+  // currentFittest=getCurrentFittest(populationFitness)
+  currentMaxFit=max(populationFitness.map(e=>e.fitness))
+
+  currentMostFittest=populationFitness.filter((e)=>e.fitness===currentMaxFit)[0]
+  // currentMostFittest=x.filter((e)=>e.fitness===currentMaxFit)
+  
+  console.log(currentMostFittest)
+
+  text(currentMostFittest.guess, width / 2, (height - 50) / 2);
+  text("Generation: "+gen, width / 2, (height - 100) / 2);
+  
+  if (currentMostFittest.fitness===perfectFit){
+    //this is our guy
+    console.log("Done")
+    noLoop()
+  }
+  
   // compute prob and normalize
   popProb = computeNormProb(populationFitness);
   // console.log(popProb.reduce((o, e) => o + e.prob, 0.0));
@@ -122,4 +146,8 @@ function draw() {
 
   temp = nextGeneration(popProb);
   population = temp;
+  
+  // noLoop()
 }
+
+
