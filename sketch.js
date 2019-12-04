@@ -1,16 +1,18 @@
+// Ram Paranjothy
+
 var label = "";
-var target = "Deep in the heart of Texas";
+var target = "If thou canst believe, all things are possible to him that believeth.";
 var rndm = "";
 // const data="abcdefghijklmnopqrstuvwxyz 0123456789."
 const alpha="abcdefghijklmnopqrstuvwxyz"
 alpha.toUpperCase()
 digits="0123456789"
-specialChars=" .,/;':\"[]{}+=-_)(*&^%$#@!~`"
+specialChars=" .,/;':\"[]{}+=-_)(*&^%$#@!~`?"
 
 data=[alpha,digits,alpha.toUpperCase(),specialChars].join()
 // data=alpha
 var population = [];
-var populationSize = 100;
+var populationSize = 150;
 var gen = 0;
 const perfectFit = 1;
 
