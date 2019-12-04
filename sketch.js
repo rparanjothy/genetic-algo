@@ -1,14 +1,15 @@
 var label = "";
 var target = "7284";
-var rndm=""
+var rndm = "";
 
 var population = [];
-var populationSize = 1000;
-var populationBest=[]
+var populationSize = 100;
+var popBest = [];
+var gen = 0;
+const perfectFit = 1;
 
-
-
-const generateLabel = x => {
+const generateRandomGuess = x => {
+  // generate a random 4 length string of int 0-10
   o = [];
   for (let _ = 0; _ < x; _++) {
     o.push(floor(random(10)));
@@ -16,146 +17,109 @@ const generateLabel = x => {
   return o.join("");
 };
 
-const calculateFitness=(x)=>{
-  console.log(x.length)
-  ff=x.map(e=>{return {guess:e,distance:fitness(e,target)}})
-  if (ff.includes(target)){
-    noLoop()
-  }
-  return ff.filter(e=>e.distance<.9)
+const calculateFitness = x => {
+  // console.log(x.length);
+  return x.map(e => {
+    rndm = e;
+    console.log("processing", rndm);
 
-  // console.log(populationBest)
-  
-}
+    return { guess: e, fitness: fitness(e, target) };
+  });
+};
 
-
+const computeNormProb = x => {
+  s = x.reduce((o, e) => o + e.fitness, 0);
+  return x.map(e => {
+    return { prob: e.fitness / s, ...e };
+  });
+};
 
 const fitness = (v, t) => {
+  // if more digits match, closer you are to the target so the distance is small
+  //  initialize with 1 so that if there are no matches, we dont end up with 1/0
   var score = 0;
   for (let idx in v) {
     score += v[idx] === t[idx] ? 1 : 0;
   }
-  return 1/(score+1);
+  scorex = score / t.length;
+  if (scorex === perfectFit) {
+    noLoop();
+  }
+
+  return scorex;
 };
 
-
-const createPopulation = (ct) => {
-  for (let i=0; i < ct; i++){
-    rndm=generateLabel(4)
+const createPopulation = ct => {
+  for (let i = 0; i < ct; i++) {
+    rndm = generateRandomGuess(4);
     population.push(rndm);
-    // score = fitness(rndm, target);
-
-    // // score = fitness("rndm", "rndm");
-    // text(target, width / 2, (height - 50) / 2);
-    // text(score, width / 2, (height + 50) / 2);
-    // populationx--;
-    // stage1 = populationx <= 0 && !stage1;
+    // sss;
   }
-    
-    // console.log("Stopped");
+};
+
+const nextGeneration = x => {
+  // pick a
+  gen += 1;
+  _ = [];
+  best = gatherBest(x);
+
+  const pickAndMutate = x => {
+    a = pickOne(x);
+    b = pickOne(x);
+    console.log(a, b);
+    dna = [a.guess.substr(0, 2), b.guess.substr(2)].join("");
+    // change one chr at a random position
+    idx = floor(random(dna.length - 1));
+    x = Array.from(dna);
+    console.log(idx, x);
+    x[idx] = generateRandomGuess(1);
+    mutated = x.join("");
+    console.log(mutated);
+    // ss;
+    return mutated;
   };
+  // we map on population to get the same pp count items in the new list
+  return population.map(e => pickAndMutate(best));
+};
 
-// const generateFrom = (v, x, y) => {
-//   console.log(x.guess, y.guess);
-//   const x_ = x.guess.slice(0, 2);
-//   const y_ = y.guess.slice(2);
+const pickOne = x => {
+  idx = floor(random(x.length));
+  o = x[idx];
+  x.slice(idx, 1);
+  return o;
+};
 
-//   potential.splice(potential.indexOf(x), 1);
-//   potential.splice(potential.indexOf(y), 1);
-
-//   ///mutate
-//   n = x_ + y_;
-//   score = fitness(n, target);
-//   if (score > 2) {
-//     potential.push({ guess: n, gen: v, score });
-//   }
-
-//   console.log(potential);
-// };
-
-const nextGeneration = (x) => {
-  o=[]
-  for (let c=0;c<x.length;c++){
-    // pickFromBest(x)
-    idx1=floor(random(x.length))
-    idx2=floor(random(x.length))
-
-    chosen1=x[idx1]
-    // chosen2=x[idx2]
-    console.log("removed",x.splice(idx1,1))
-    // x.splice(idx2,1)
-    // console.log("removed",x.splice(idx2,1))
-
-
-    // console.log(chosen1,chosen2)
-
-
-    // mutate()
-    mutatedChoosen1=shuffle([...chosen1.guess]).join("")
-    // mutatedChoosen2=shuffle([...chosen2.guess]).join("")
-    // console.log(mutatedChoosen1,mutatedChoosen2)
-
-
-    // crossover()
-    // add back to populatioBest
-    // chosen.guess=mutatedChoosen
-    // console.log(chosen)
-
-    // mutatect1=floor(random(3))
-    // mutatect2=4-mutatect1
-    // p1=mutatedChoosen1.slice(mutatect1)
-    // p2=mutatedChoosen2.slice(mutatect2)
-    // console.log(p1,p2)
-
-    // console.log("Added",o.push([p1,p2].join("")))
-    console.log("Added",o.push(mutatedChoosen1))
-
-  }
-  console.log("o",o.length)
-  return o
-  
-  // remove original from populationBest
-  // make populationBest population
-  
-  
+const gatherBest = x => {
+  mx = max(x.map(e => e.prob));
+  console.log(mx);
+  closeToMax = x.filter(e => mx - e.prob <= 0.001);
+  // take one from closeToMax
+  console.log(closeToMax);
+  return closeToMax;
 };
 
 function setup() {
   createCanvas(windowWidth - 50, windowHeight - 20);
-  createPopulation(populationSize)
+  createPopulation(populationSize);
 }
 
-const normalize=(x)=>{
-  s=x.reduce((o,e)=>o+e.distance,0)
-  // console.log(x.map(e=>{return {prob:1-e.distance/s,...e}}))
-  
-}
-
-
-const pickFromBest=(x)=>{
-  // find the high prob in the list and get one 
-  x[floor(random(x.length-1))]
-
-}
+const areWeDone = () => {};
 
 function draw() {
-
+  console.log(gen);
   background(187);
   textSize(20);
   text(target, width / 2, (height - 50) / 2);
   text(rndm, width / 2, height / 2);
+  //  see if we have our guy in population
 
+  //calculate fitness for random guesses
+  populationFitness = calculateFitness(population);
+  // compute prob and normalize
+  popProb = computeNormProb(populationFitness);
+  // console.log(popProb.reduce((o, e) => o + e.prob, 0.0));
+  //nextGen
 
-  populationBest=calculateFitness(population)
-  // normalize(populationBest)
-  o=nextGeneration(populationBest)
-  console.log("o is",o)
-  if (o.length===0){
-    createPopulation(populationSize)
-  } 
-  else{
-    population=o
-
-  }
+  temp = nextGeneration(popProb);
+  population = temp;
 }
-
