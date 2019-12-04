@@ -1,10 +1,16 @@
 var label = "";
-var target = "rishi";
+var target = "7284";
 var rndm = "";
-const data="abcdefghijklmnopqrstuvwxyz0123456789 ."
+// const data="abcdefghijklmnopqrstuvwxyz 0123456789."
+const alpha="abcdefghijklmnopqrstuvwxyz ."
+alpha.toUpperCase()
+digits="0123456789"
+specialChars=" .,/;':\"[]{}+=-_)(*&^%$#@!~`"
 
+data=[alpha,digits,alpha.toUpperCase(),specialChars].join()
+// data=alpha
 var population = [];
-var populationSize = 10;
+var populationSize = 100;
 var gen = 0;
 const perfectFit = 1;
 
@@ -66,17 +72,19 @@ const nextGeneration = x => {
     // console.log(a, b);
     mi=3
     // console.log(a.guess,b.guess,mi,a.guess.substr(0, mi),b.guess.substr(mi))
-    dna = [a.guess.substr(0, mi), b.guess.substr(mi)].join("");
+    // if (a && b){
+      dna = [a.guess.substr(0, mi), b.guess.substr(mi)].join("");
+      idx = floor(random(dna.length));
+      x = Array.from(dna);
+      // console.log(idx, x);
+      x[idx] = generateRandomGuess(1);
+      mutated = x.join("");
+      // console.log(mutated);
+      // ss;
+      return mutated;  
+    
     // console.log('dna',dna)
     // change one chr at a random position
-    idx = floor(random(dna.length));
-    x = Array.from(dna);
-    // console.log(idx, x);
-    x[idx] = generateRandomGuess(1);
-    mutated = x.join("");
-    // console.log(mutated);
-    // ss;
-    return mutated;
   };
   // we map on population to get the same pp count items in the new list
   return population.map(e => pickAndMutate(best));
@@ -121,13 +129,16 @@ function displayInfo() {
 
   stats.html("<div class=stats>"+ statstext+"</div>");
 
-  allPhrases.html("<div> All phrases:<br>" + population.reduce((o,e)=>o+"<br>"+e)+"</div>"
+  allPhrases.html("<div> High Fitness Guesses:<br>" + population.reduce((o,e)=>o+"<br>"+e)+"</div>"
   )}
 
 
   function setup() {
     // createCanvas(windowWidth - 50, windowHeight - 20);
-    ToFind = createP("<div>Target: "+target+"</div>");
+    ToFind = createP("<div>Target: <br>"+target+"</div>");
+    stats = createP("Stats");
+    // stats.position(10,200);
+    stats.class("stats");
     bestPhrase = createP("Best phrase: ");
     //bestPhrase.position(10,10);
     bestPhrase.class("best");
@@ -136,9 +147,7 @@ function displayInfo() {
     // allPhrases.position(300, 10);
     allPhrases.class("all");
   
-    stats = createP("Stats");
-    // stats.position(10,200);
-    stats.class("stats");
+    
   
     createPopulation(populationSize);
     gen=0
