@@ -1,7 +1,7 @@
 var label = "";
-var target = "91426474119142647411";
+var target = "rishi";
 var rndm = "";
-
+const data="abcdefghijklmnopqrstuvwxyz0123456789 ."
 
 var population = [];
 var populationSize = 10;
@@ -12,7 +12,8 @@ const generateRandomGuess = x => {
   // generate a random 4 length string of int 0-10
   o = [];
   for (let _ = 0; _ < x; _++) {
-    o.push(floor(random(10)));
+    o.push(data[floor(random(data.length))]);
+    // o.push(floor(random(10)));
   }
   return o.join("");
 };
