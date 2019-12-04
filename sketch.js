@@ -1,5 +1,5 @@
 var label = "";
-var target = "Pflugerville";
+var target = "AMDAustin:8918!";
 var rndm = "";
 // const data="abcdefghijklmnopqrstuvwxyz 0123456789."
 const alpha="abcdefghijklmnopqrstuvwxyz ."
@@ -49,7 +49,7 @@ const fitness = (v, t) => {
     score += v[idx] === t[idx] ? 1 : 0;
   }
   scorex = score / t.length;
-  return scorex;
+  return scorex**2;
 };
 
 const createPopulation = ct => {
