@@ -1,7 +1,7 @@
 // Ram Paranjothy
 
 var label = "";
-var target = "If thou canst believe, all things are possible to him that believeth.";
+var target = "all things are possible to him that believeth.";
 var rndm = "";
 // const data="abcdefghijklmnopqrstuvwxyz 0123456789."
 const alpha="abcdefghijklmnopqrstuvwxyz"
