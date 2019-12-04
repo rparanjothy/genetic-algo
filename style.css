@@ -1,24 +1,29 @@
 body {
+  margin:20px;
   background: rgb(24, 23, 23);
   display: flex;
   flex-direction: row;
-  /* justify-content: flex-e; */
+  justify-content: space-between;
   color: rgba(43, 179, 184, 0.838) ;
   line-height: 2em;
   font-family: 'Courier New', Courier, monospace;
+  font-size: smaller;
+
+}
+
+body >* {
+  width:230px
 }
 
 canvas{
   display: none;
 }
 
-*{
-  padding:10px;
-  /* margin:20px */
-}
 
-h2{
+body>h2{
   /* display: flex; */
   /* flex:1 */
   color: brown;
+  width:150px;
+  box-sizing: border-box;
 }
