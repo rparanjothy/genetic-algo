@@ -1,8 +1,8 @@
 var label = "";
-var target = "AMDAustin:8918!";
+var target = "Deep in the heart of Texas";
 var rndm = "";
 // const data="abcdefghijklmnopqrstuvwxyz 0123456789."
-const alpha="abcdefghijklmnopqrstuvwxyz ."
+const alpha="abcdefghijklmnopqrstuvwxyz"
 alpha.toUpperCase()
 digits="0123456789"
 specialChars=" .,/;':\"[]{}+=-_)(*&^%$#@!~`"
@@ -55,7 +55,7 @@ const fitness = (v, t) => {
 const createPopulation = ct => {
   for (let i = 0; i < ct; i++) {
     rndm = generateRandomGuess(target.length);
-    console.log(rndm)
+    // console.log(rndm)
     population.push(rndm);
     // sss;
   }
@@ -70,7 +70,7 @@ const nextGeneration = x => {
     a = pickOne(x);
     b = pickOne(x);
     // console.log(a, b);
-    mi=3
+    mi=floor(random(target.length))
     // console.log(a.guess,b.guess,mi,a.guess.substr(0, mi),b.guess.substr(mi))
     // if (a && b){
       dna = [a.guess.substr(0, mi), b.guess.substr(mi)].join("");
@@ -121,7 +121,6 @@ const getCurrentFittest = (x) => {
 function displayInfo() {
   let answer = currentMostFittest.guess;
   ht="<div class=phrase>Best phrase:<br>" + answer+"<div>"
-  // bestPhrase.html("Best phrase:<br>" + answer);
   bestPhrase.html(ht);
 
   let statstext = "Total generations:     " + gen + "<br>";
@@ -134,20 +133,13 @@ function displayInfo() {
 
 
   function setup() {
-    // createCanvas(windowWidth - 50, windowHeight - 20);
     ToFind = createP("<div>Target: <br>"+target+"</div>");
     stats = createP("Stats");
-    // stats.position(10,200);
     stats.class("stats");
     bestPhrase = createP("Best phrase: ");
-    //bestPhrase.position(10,10);
     bestPhrase.class("best");
-  
     allPhrases = createP("All phrases:");
-    // allPhrases.position(300, 10);
     allPhrases.class("all");
-  
-    
   
     createPopulation(populationSize);
     gen=0
@@ -168,7 +160,7 @@ function draw() {
   currentMostFittest=populationFitness.filter((e)=>e.fitness===currentMaxFit)[0]
   // currentMostFittest=x.filter((e)=>e.fitness===currentMaxFit)
   
-  console.log(currentMostFittest)
+  // console.log(currentMostFittest)
 
   // text(currentMostFittest.guess, width / 2, (height - 50) / 2);
   // text("Generation: "+gen, width / 2, (height - 100) / 2);

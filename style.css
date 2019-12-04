@@ -8,6 +8,8 @@ body {
   line-height: 2em;
   font-family: 'Courier New', Courier, monospace;
   font-size: smaller;
+  word-wrap: break-word;
+  
 
 }
 
