@@ -1,20 +1,31 @@
 // Ram Paranjothy
 
 var label = "";
-var target = "all things are possible to him that believeth.";
+// var target = "all things are possible to him that believeth.";
+var target = prompt(
+  "Data to train for?",
+  "all things are possible to him that believeth."
+);
+if (target === null) {
+  noLoop();
+}
 var rndm = "";
 // const data="abcdefghijklmnopqrstuvwxyz 0123456789."
-const alpha="abcdefghijklmnopqrstuvwxyz"
-alpha.toUpperCase()
-digits="0123456789"
-specialChars=" .,/;':\"[]{}+=-_)(*&^%$#@!~`?"
+const alpha = "abcdefghijklmnopqrstuvwxyz";
+alpha.toUpperCase();
+digits = "0123456789";
+specialChars = " .,/;':\"[]{}+=-_)(*&^%$#@!~`?";
 
-data=[alpha,digits,alpha.toUpperCase(),specialChars].join()
+data = [alpha, digits, alpha.toUpperCase(), specialChars].join();
 // data=alpha
 var population = [];
-var populationSize = 150;
+// var populationSize = 150;
+const populationSize = prompt("Enter Population Size", 150);
+
 var gen = 0;
 const perfectFit = 1;
+
+// prompt();
 
 const generateRandomGuess = x => {
   // generate a random 4 length string of int 0-10
@@ -51,7 +62,7 @@ const fitness = (v, t) => {
     score += v[idx] === t[idx] ? 1 : 0;
   }
   scorex = score / t.length;
-  return scorex**2;
+  return scorex ** 2;
 };
 
 const createPopulation = ct => {
@@ -72,19 +83,19 @@ const nextGeneration = x => {
     a = pickOne(x);
     b = pickOne(x);
     // console.log(a, b);
-    mi=floor(random(target.length))
+    mi = floor(random(target.length));
     // console.log(a.guess,b.guess,mi,a.guess.substr(0, mi),b.guess.substr(mi))
     // if (a && b){
-      dna = [a.guess.substr(0, mi), b.guess.substr(mi)].join("");
-      idx = floor(random(dna.length));
-      x = Array.from(dna);
-      // console.log(idx, x);
-      x[idx] = generateRandomGuess(1);
-      mutated = x.join("");
-      // console.log(mutated);
-      // ss;
-      return mutated;  
-    
+    dna = [a.guess.substr(0, mi), b.guess.substr(mi)].join("");
+    idx = floor(random(dna.length));
+    x = Array.from(dna);
+    // console.log(idx, x);
+    x[idx] = generateRandomGuess(1);
+    mutated = x.join("");
+    // console.log(mutated);
+    // ss;
+    return mutated;
+
     // console.log('dna',dna)
     // change one chr at a random position
   };
@@ -108,83 +119,100 @@ const gatherBest = x => {
   return closeToMax;
 };
 
+const getCurrentFittest = x => {
+  currentMaxFit = max(x.map(e => e.fitness));
 
+  currentMostFittest = x.filter(e => e.fitness === currentMaxFit)[0];
+  // currentMostFittest=x.filter((e)=>e.fitness===currentMaxFit)
 
-const getCurrentFittest = (x) => {
-    currentMaxFit=max(x.map(e=>e.fitness))
+  console.log(currentMostFittest);
 
-    currentMostFittest=x.filter((e)=>e.fitness===currentMaxFit)[0]
-    // currentMostFittest=x.filter((e)=>e.fitness===currentMaxFit)
-    
-    console.log(currentMostFittest)
-    
-    return currentMostFittest
+  return currentMostFittest;
 };
+
 function displayInfo() {
   let answer = currentMostFittest.guess;
-  ht="<div class=phrase>Best phrase:<br>" + answer+"<div>"
-  bestPhrase.html(ht);
+  ht = "<div class=phrase>Best phrase:<br>" + answer + "<div>";
+  // bestPhrase.html(ht);
 
   let statstext = "Total generations:     " + gen + "<br>";
   statstext += "Total population:      " + populationSize + "<br>";
+  statstext += "Max Fitness:      " + currentMaxFit.toFixed(2);
 
-  stats.html("<div class=stats>"+ statstext+"</div>");
+  // stats.html("<div class=stats>" + statstext + "</div>");
 
-  allPhrases.html("<div> High Fitness Guesses:<br>" + population.reduce((o,e)=>o+"<br>"+e)+"</div>"
-  )}
+  // allPhrases.html(
+  //   "<div> High Fitness Guesses:<br>" +
+  //     population.reduce((o, e) => o + "<br>" + e) +
+  //     "</div>"
+  // );
+  render();
+}
 
+const render = () => {
+  let answer = currentMostFittest.guess;
+  let statstext = "Total generations: " + gen + "<br>";
+  statstext += "Total population: " + populationSize + "<br>";
+  statstext += "Max Fitness:" + currentMaxFit.toFixed(2);
+  document.getElementById("header").innerHTML = "<h2>Genetic Algorithm</h2>";
+  document.getElementById("target").innerHTML = target;
+  document.getElementById("statsData").innerHTML = statstext;
+  document.getElementById("best").innerHTML = "<b>" + answer + "</b>";
+  document.getElementById("guesses").innerHTML = population.reduce(
+    (o, e) => o + "<div class=gg>" + e + "</div>",
+    ""
+  );
+};
 
-  function setup() {
-    ToFind = createP("<div>Target: <br>"+target+"</div>");
-    stats = createP("Stats");
-    stats.class("stats");
-    bestPhrase = createP("Best phrase: ");
-    bestPhrase.class("best");
-    allPhrases = createP("All phrases:");
-    allPhrases.class("all");
-  
-    createPopulation(populationSize);
-    gen=0
-  }
+function setup() {
+  // ToFind = createP("<div>Target: <br>" + target + "</div>");
+  // stats = createP("Stats");
+  // stats.class("stats");
+  // bestPhrase = createP("Best phrase: ");
+  // bestPhrase.class("best");
+  // allPhrases = createP("All phrases:");
+  // allPhrases.class("all");
+
+  createPopulation(populationSize);
+  gen = 0;
+}
 
 function draw() {
   // console.log(gen);
   background(187);
   // textSize(20);
   // text("Target: "+target, width / 2, (height - 150) / 2);
-  
+
   //calculate fitness for random guesses
   populationFitness = calculateFitness(population);
 
   // currentFittest=getCurrentFittest(populationFitness)
-  currentMaxFit=max(populationFitness.map(e=>e.fitness))
+  currentMaxFit = max(populationFitness.map(e => e.fitness));
 
-  currentMostFittest=populationFitness.filter((e)=>e.fitness===currentMaxFit)[0]
+  currentMostFittest = populationFitness.filter(
+    e => e.fitness === currentMaxFit
+  )[0];
   // currentMostFittest=x.filter((e)=>e.fitness===currentMaxFit)
-  
+
   // console.log(currentMostFittest)
 
   // text(currentMostFittest.guess, width / 2, (height - 50) / 2);
   // text("Generation: "+gen, width / 2, (height - 100) / 2);
-  
-  if (currentMostFittest.fitness===perfectFit){
+
+  if (currentMostFittest.fitness === perfectFit) {
     //this is our guy
-    console.log("Done")
-    noLoop()
+    console.log("Done");
+    noLoop();
   }
-  
+
   // compute prob and normalize
   popProb = computeNormProb(populationFitness);
   // console.log(popProb.reduce((o, e) => o + e.prob, 0.0));
   //nextGen
 
-  temp = nextGeneration(popProb);
-  population = temp;
+  population = nextGeneration(popProb);
 
-  displayInfo()
+  displayInfo();
 
-  
   // noLoop()
 }
-
-

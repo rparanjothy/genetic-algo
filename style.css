@@ -1,31 +1,69 @@
 body {
-  margin:20px;
+  margin: 0 auto;
+  width: 90%;
   background: rgb(24, 23, 23);
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+body > div {
+  color: antiquewhite;
+}
+
+.showcase {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  color: rgba(43, 179, 184, 0.838) ;
+  /* justify-content: space-around; */
+  margin: 20px;
+}
+.showcase > div {
+  /* border: 1px dotted grey; */
+  padding: 10px;
+  margin: auto;
+}
+
+.guesses {
+  margin-top: 2em;
+  color: rgba(43, 179, 184, 0.838);
   line-height: 2em;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: smaller;
-  word-wrap: break-word;
-  
-
+  /* border: 2px solid green; */
 }
 
-body >* {
-  width:230px
+.statsData {
+  width: 40%;
+  /* height: 50%; */
+  color: rgba(124, 190, 168, 0.838);
 }
 
-canvas{
+.best {
+  width: 50%;
+  color: rgba(34, 192, 139, 0.838);
+  font-size: larger;
+}
+
+.target {
+  color: rgba(34, 192, 139, 0.838);
+}
+
+.header {
+  color: rgba(34, 192, 139, 0.838);
+  align-self: center;
+  padding: 10px;
+  font-size: larger;
+}
+
+canvas {
   display: none;
 }
 
+.guesses > .gg {
+  text-align: center;
+}
 
-body>h2{
-  /* display: flex; */
-  /* flex:1 */
-  color: brown;
-  width:150px;
-  box-sizing: border-box;
+div {
+  text-align: left;
 }
