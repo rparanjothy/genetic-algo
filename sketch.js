@@ -44,8 +44,7 @@ const calculateFitness = x => {
   return x.map(e => {
     rndm = e;
     // console.log("processing", rndm);
-    x = fitness(e, target)
-    return { guess: e, fitness:x.fitness };
+    return { guess: e, fitness:fitness(e, target) };
   });
 };
 
@@ -60,12 +59,11 @@ const fitness = (v, t) => {
   // if more digits match, closer you are to the target so the distance is small
   //  initialize with 1 so that if there are no matches, we dont end up with 1/0
   var score = 0;
-  var matchedIdx=[]
   for (let idx in v) {
     score += v[idx] === t[idx] ? 1 : 0;
   }
   scorex = score / t.length;
-  return {matched:matchedIdx,fitness:scorex ** 2};
+  return scorex ** 2;
 };
 
 const createPopulation = ct => {
