@@ -93,7 +93,6 @@ const nextGeneration = x => {
     x[idx] = generateRandomGuess(1);
     mutated = x.join("");
     // console.log(mutated);
-    // ss;
     return mutated;
 
     // console.log('dna',dna)
@@ -123,31 +122,12 @@ const getCurrentFittest = x => {
   currentMaxFit = max(x.map(e => e.fitness));
 
   currentMostFittest = x.filter(e => e.fitness === currentMaxFit)[0];
-  // currentMostFittest=x.filter((e)=>e.fitness===currentMaxFit)
 
   console.log(currentMostFittest);
 
   return currentMostFittest;
 };
 
-function displayInfo() {
-  let answer = currentMostFittest.guess;
-  ht = "<div class=phrase>Best phrase:<br>" + answer + "<div>";
-  // bestPhrase.html(ht);
-
-  let statstext = "Total generations:     " + gen + "<br>";
-  statstext += "Total population:      " + populationSize + "<br>";
-  statstext += "Max Fitness:      " + currentMaxFit.toFixed(2);
-
-  // stats.html("<div class=stats>" + statstext + "</div>");
-
-  // allPhrases.html(
-  //   "<div> High Fitness Guesses:<br>" +
-  //     population.reduce((o, e) => o + "<br>" + e) +
-  //     "</div>"
-  // );
-  render();
-}
 
 const render = () => {
   let answer = currentMostFittest.guess;
@@ -165,24 +145,12 @@ const render = () => {
 };
 
 function setup() {
-  // ToFind = createP("<div>Target: <br>" + target + "</div>");
-  // stats = createP("Stats");
-  // stats.class("stats");
-  // bestPhrase = createP("Best phrase: ");
-  // bestPhrase.class("best");
-  // allPhrases = createP("All phrases:");
-  // allPhrases.class("all");
-
   createPopulation(populationSize);
   gen = 0;
 }
 
 function draw() {
-  // console.log(gen);
   background(187);
-  // textSize(20);
-  // text("Target: "+target, width / 2, (height - 150) / 2);
-
   //calculate fitness for random guesses
   populationFitness = calculateFitness(population);
 
@@ -192,12 +160,7 @@ function draw() {
   currentMostFittest = populationFitness.filter(
     e => e.fitness === currentMaxFit
   )[0];
-  // currentMostFittest=x.filter((e)=>e.fitness===currentMaxFit)
 
-  // console.log(currentMostFittest)
-
-  // text(currentMostFittest.guess, width / 2, (height - 50) / 2);
-  // text("Generation: "+gen, width / 2, (height - 100) / 2);
 
   if (currentMostFittest.fitness === perfectFit) {
     //this is our guy
@@ -207,12 +170,11 @@ function draw() {
 
   // compute prob and normalize
   popProb = computeNormProb(populationFitness);
-  // console.log(popProb.reduce((o, e) => o + e.prob, 0.0));
   //nextGen
 
   population = nextGeneration(popProb);
 
-  displayInfo();
+  render();
 
   // noLoop()
 }
