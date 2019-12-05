@@ -7,7 +7,7 @@ var target = prompt(
   "all things are possible to him that believeth."
 );
 if (target === null) {
-  noLoop();
+  target="God is good!"
 }
 var rndm = "";
 // const data="abcdefghijklmnopqrstuvwxyz 0123456789."
@@ -20,8 +20,10 @@ data = [alpha, digits, alpha.toUpperCase(), specialChars].join();
 // data=alpha
 var population = [];
 // var populationSize = 150;
-const populationSize = prompt("Enter Population Size", 150);
-
+var populationSize = prompt("Enter Population Size", 150)
+if (populationSize ===null){
+  populationSize=150
+}
 var gen = 0;
 const perfectFit = 1;
 
@@ -42,8 +44,8 @@ const calculateFitness = x => {
   return x.map(e => {
     rndm = e;
     // console.log("processing", rndm);
-
-    return { guess: e, fitness: fitness(e, target) };
+    x = fitness(e, target)
+    return { guess: e, fitness:x.fitness };
   });
 };
 
@@ -58,11 +60,12 @@ const fitness = (v, t) => {
   // if more digits match, closer you are to the target so the distance is small
   //  initialize with 1 so that if there are no matches, we dont end up with 1/0
   var score = 0;
+  var matchedIdx=[]
   for (let idx in v) {
     score += v[idx] === t[idx] ? 1 : 0;
   }
   scorex = score / t.length;
-  return scorex ** 2;
+  return {matched:matchedIdx,fitness:scorex ** 2};
 };
 
 const createPopulation = ct => {
@@ -75,28 +78,22 @@ const createPopulation = ct => {
 };
 
 const nextGeneration = x => {
-  // pick a
   gen += 1;
   best = gatherBest(x);
 
   const pickAndMutate = x => {
     a = pickOne(x);
     b = pickOne(x);
-    // console.log(a, b);
+
     mi = floor(random(target.length));
-    // console.log(a.guess,b.guess,mi,a.guess.substr(0, mi),b.guess.substr(mi))
-    // if (a && b){
     dna = [a.guess.substr(0, mi), b.guess.substr(mi)].join("");
+    
     idx = floor(random(dna.length));
+    
     x = Array.from(dna);
-    // console.log(idx, x);
     x[idx] = generateRandomGuess(1);
     mutated = x.join("");
-    // console.log(mutated);
     return mutated;
-
-    // console.log('dna',dna)
-    // change one chr at a random position
   };
   // we map on population to get the same pp count items in the new list
   return population.map(e => pickAndMutate(best));
@@ -104,14 +101,11 @@ const nextGeneration = x => {
 
 const pickOne = x => {
   idx = floor(random(x.length));
-  o = x[idx];
-  x.slice(idx, 1);
-  return o;
+  return x[idx];
 };
 
 const gatherBest = x => {
   mx = max(x.map(e => e.prob));
-  // console.log(mx);
   closeToMax = x.filter(e => mx - e.prob <= 0.001);
   // take one from closeToMax
   // console.log(closeToMax);
